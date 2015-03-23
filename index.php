@@ -1,13 +1,10 @@
 <?php
-
 // have config drive doc root
 require_once 'config/config.php';
-
-
 ?><!DOCTYPE html>
 <html>
   <head>
-    <title>Gigya</title>
+    <title>Gigya Integration</title>
     <script type="text/javascript">
     // Livefyre configuration used globally.
     var LIVEFYRE_NETWORK = "<?php echo LIVEFYRE_NETWORK; ?>";

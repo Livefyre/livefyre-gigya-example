@@ -3,7 +3,7 @@
 // SET ALL AGAINST DOC ROOT
 require_once '../../config/config.php';
 require_once '../lib/gigya/GSSDK.php';
-require_once '../base/livefyre/Livefyre.php';
+require_once '../livefyre-php-utils/src/Livefyre.php';
 
 $response = array();
 try {
@@ -30,6 +30,10 @@ $userInfo = $request->send();
     throw new ErrorException($userInfo->getErrorMessage());
   }
 
+
+
+  // TODO:
+  // replace with new token from LF php utils Token.php
   // Generate Livefyre authentication
   $livefyre = new Livefyre_Domain(LIVEFYRE_NETWORK, LIVEFYRE_NETWORK_KEY);
   $token = $livefyre->user($userInfo->getString('UID'), $userInfo->getString('nickname'))->token(SESSION_EXPIRATION);
