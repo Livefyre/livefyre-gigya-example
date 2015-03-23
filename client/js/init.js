@@ -76,15 +76,22 @@
     }
   }
 
+
   var loginLivefyre = function(promise) {
     if(!$.cookie(LIVEFYRE_COOKIE_NAME)) { // Only if not already logged into Livefyre
       // With valid user signature, returns LiveFyre cookie
+
       $.ajax({
         url: "server/ajax/token-endpoint.php",
         data: {
           UID: USER.UID,
           UIDSignature: USER.UIDSignature,
           signatureTimestamp: USER.signatureTimestamp
+          // dangleys are allowed now, but...
+          // ,
+          // not necessary if making the token-endpoint
+            // call to gigya beforehand
+          // displayName: grabDisplayName(USER)
         },
         type: "POST",
         dataType: "json",
