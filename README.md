@@ -26,11 +26,11 @@ PHP 						>= 	5.4
 
 PHP_JSON					>=	5.2
 
-Gigya SDK						2.15.2
+Gigya SDK					=	2.15.2
 
-Livefyre-php-utilities			2.0.2
+Livefyre-php-utilities		=	2.0.2
 
-Requests						1.6
+Requests					=	1.6
 
 
 CLIENT:
