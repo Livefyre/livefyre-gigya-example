@@ -25,7 +25,11 @@ php -S localhost:4444
 ####Special Notes in server/ajax/token-endpoint.php####
 
 
-#####DEPENDENCIES:#####
+
+
+#####DEPENDENCY LIST:#####
+There is nothing to do here, but take note perhaps
+
 
 SERVER:
 
