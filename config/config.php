@@ -10,7 +10,7 @@
 
 
 // PUSH THESE VARS TO ENV
-define('SITE_DOMAIN', '<INSERT-YOUR-WEBSITE-DOMAIN-HERE>');
+define('SITE_DOMAIN', 'localhost');
 define('SESSION_EXPIRATION', 2592000); // 30 days
 
 define('GIGYA_API_KEY',
@@ -23,3 +23,6 @@ define('LIVEFYRE_SITE_ID', '303862');
 define('LIVEFYRE_SITE_KEY', 'SD58lOlEAMpB93j1NzCdqYX1xdw=');
 
 define('LIVEFYRE_COOKIE_NAME', 'livefyre_token');
+
+// THIS VALUE IS STORED ON GIGYA: ACCOUNTINFO.DATA.LF_UID
+define('LIVEFYRE_ID_FIELD', 'LF_UID');
