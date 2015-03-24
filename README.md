@@ -4,15 +4,22 @@ This sample application shows how to integrate Livefyre with Gigya's APIs to log
 
 
 ###INSTALL ME:###
+
 git clone git@github.com
 
 
 ###PREP ME:###
+
 fill in config/config.php
 
+
 ##RUN ME:##
+
 cd livefyre-gigya-example
+
 php -S localhost:4444
+
+
 
 
 ####Special Notes in server/ajax/token-endpoint.php####
