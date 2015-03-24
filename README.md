@@ -3,17 +3,17 @@
 This sample application shows how to integrate Livefyre with Gigya's APIs to log a user in
 
 
-###INSTALL ME:###
+##INSTALL ME##
 
 git clone git@github.com
 
 
-###PREP ME:###
+##PREP ME##
 
 fill in config/config.php
 
 
-##RUN ME:##
+##RUN ME##
 
 cd livefyre-gigya-example
 
@@ -22,12 +22,12 @@ php -S localhost:4444
 
 
 
-####Special Notes in server/ajax/token-endpoint.php####
+###Special Notes in server/ajax/token-endpoint.php###
 
 
 
 
-#####DEPENDENCY LIST:#####
+####DEPENDENCY LIST:####
 There is nothing to do here, but take note perhaps
 
 
