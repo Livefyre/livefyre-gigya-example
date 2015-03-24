@@ -21,14 +21,22 @@ php -S localhost:4444
 #####DEPENDENCIES:#####
 
 SERVER:
+
 PHP 						>= 	5.4
+
 PHP_JSON					>=	5.2
+
 Gigya SDK						2.15.2
+
 Livefyre-php-utilities			2.0.2
+
 Requests						1.6
 
+
 CLIENT:
+
 jQuery
+
 jQuery Cookie
-Underscore?
+
 
