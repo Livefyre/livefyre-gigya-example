@@ -28,7 +28,7 @@ php -S localhost:4444
 
 
 ####DEPENDENCY LIST:####
-There is nothing to do here, but take note perhaps
+There isn't really anything to do here, but take note perhaps, unless your PHP version doesn't include the necessary extensions
 
 
 SERVER:
