@@ -10,12 +10,12 @@ git clone git@github.com
 
 ##PREP ME##
 
+cd livefyre-gigya-example
+
 fill in config/config.php
 
 
 ##RUN ME##
-
-cd livefyre-gigya-example
 
 php -S localhost:4444
 
