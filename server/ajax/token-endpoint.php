@@ -42,15 +42,6 @@ use Livefyre\Core\Network as Network;
     return $uid;
   }
 
-// There is also the possibility of using the MD5 hash
-  // of the Gigya UID to set as the Livefyre UID
-  // but to make it readily available to your workflow might entail
-  // making a request to Gigya to set arbitrary data on the User object
-  // something like "LF_UID" and setting that key's value to the MD5
-  // hashed Gigya UID that now serves as the LF UID
-  // see the returned data below for comparisons and keep reading to see
-  // the options in action
-
 
 $response = array();
 try {
@@ -84,34 +75,6 @@ try {
 
   $GIGYA_UID = $userInfo->getString('UID');
 
-
-  // THE MD5 OPTION
-  // MD5 THE GIGYA ID TO PASS TO LIVEFYRE
-  // the goal is URL-SAFE chars
-  $LF_SAFE_GIGYA_UID = md5($GIGYA_UID);
-
-  // store on Gigya -- accounts.setAccountInfo
-    // 'data'
-  $updateUserRequest = new GSRequest(GIGYA_API_KEY, GIGYA_SECRET, "accounts.setAccountInfo");
-
-  $LF_UserParam = array(LIVEFYRE_ID_FIELD => $LF_SAFE_GIGYA_UID);
-  $LF_UserID = json_encode($LF_UserParam);
-
-  $updateUserRequest->setParam("data", $LF_UserID);
-  $updateUserRequest->setParam("httpStatusCodes", true);
-
-
-  $response = $updateUserRequest->send();
-
-  if ($response->getErrorCode() == 0) {
-    $LF_UPDATED_USER = $response->getString(LIVEFYRE_ID_FIELD);
-
-  } else {
-    $LF_UPDATED_USER = $response->getErrorMessage();
-
-  }
-
-
   // THE STRING REPLACEMENT OPTION
     // which requires no extra storage on Gigya to have access
   $LF_SAFE_GIGYA_UID = base64_to_urlsafe_base64($GIGYA_UID);
@@ -121,6 +84,7 @@ try {
   $token = $net->buildUserAuthToken($LF_SAFE_GIGYA_UID,
       $userInfo->getString('nickname'), SESSION_EXPIRATION);
 
+
   // for the sake of example:
   // UID, Gigya UID, and LF-URL-safe translated Gigya UID
   $response = array(
@@ -129,8 +93,6 @@ try {
     'GIGYA_UID,'      => $GIGYA_UID,
     'LF_SAFE_UID'     => $LF_SAFE_GIGYA_UID,
     'GIGYA_ACCT_DATA' => $LF_UPDATED_USER,
-    'LF_UserParam'    => $LF_UserParam,
-    'LF_UserID'       => $LF_UserID,
   );
 
 } catch(Exception $e) {
@@ -141,8 +103,6 @@ try {
     'GIGYA_UID,'      => $GIGYA_UID,
     'LF_SAFE_UID'     => $LF_SAFE_GIGYA_UID,
     'GIGYA_ACCT_DATA' => $LF_UPDATED_USER,
-    'LF_UserParam'    => $LF_UserParam,
-    'LF_UserID'       => $LF_UserID,
   );
 }
 

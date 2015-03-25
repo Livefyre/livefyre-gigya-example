@@ -1,31 +1,58 @@
-(function($, undefined) {
-  // needs a rework
+(function(root, $) {
+    "use strict";
 
-  var USER;
+    var USER;
 
-  var error = function(message) {
-    if(console && console.log) {
-      console.log(message);
+    var loginBTN$ = $(".login");
+    var logoutBTN$ = $(".logout");
+
+
+    var LF_READY = false;
+    // Livefyre.required Apps
+    root.LF_APPS = {};
+
+
+
+    var SETTINGS = {
+        networkConfig: {
+
+        },
+        convConfig: {
+
+        }
+    };
+
+
+
+
+    var error = function(message) {
+        if(console && console.log) {
+            console.log(message);
+        }
     }
-  }
 
-  var triggerLogin = function(promise) {
-    gigya.accounts.showScreenSet({
-      screenSet: "Login-web"
+
+    var triggerLogin = function(promise) {
+        gigya.accounts.showScreenSet({
+        screenSet: "Login-web"
     });
 
-    var waitingForLogin = true;
+
+  var waitingForLogin = true;
 
     // Detect if user logged in
-    gigya.accounts.addEventHandlers({
-      onLogin: function() {
-          if(waitingForLogin) {
+  gigya.accounts.addEventHandlers({
+    onLogin: function() {
+
+        if (waitingForLogin) {
           waitingForLogin = false;
-          // promise doesnt exist
-          // promise.success();
+
+        if (promise) {
+          promise.success();
         }
       }
-    });
+    }
+  });
 
     // Detect if screen was closed
     // In the future, Gigya will have "onHide"
@@ -62,79 +89,98 @@
     onUserStateChange();
   }
 
+
+
   var onUserStateChange = function() {
     if(USER) {
       // Logged in
       loginLivefyre();
-      $(".logged-out").hide();
-      $(".logged-in").show();
+
+      loginBTN$.hide();
+      logoutBTN$.show();
+
     } else {
       // Logged out
       logoutLivefyre();
-      $(".logged-out").show();
-      $(".logged-in").hide();
+
+      loginBTN$.show();
+      logoutBTN$.hide();
     }
   }
 
-  var loginLivefyre = function(promise) {
-    if(!$.cookie(LIVEFYRE_COOKIE_NAME)) {
-    // Only if not already logged into Livefyre
-      // With valid user signature, returns LiveFyre cookie
-      $.ajax({
-        url: "server/ajax/token-endpoint.php",
-        data: {
-          UID: USER.UID,
-          UIDSignature: USER.UIDSignature,
-          signatureTimestamp: USER.signatureTimestamp
-          // not necessary if making the token-endpoint
-            // call to gigya beforehand
-          // displayName: grabDisplayName(USER)
-        },
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        complete: function(jqXHR, textStatus) {
-          jqXHR.done(function(response) {
-            if(!response.success) {
-              return error("Livefyre token request failed");
-            }
 
-            // Pass token to Livefyre SDK
-            $.cookie(LIVEFYRE_COOKIE_NAME, response.token);
+
+    var loginLivefyre = function(promise) {
+        if(!$.cookie(LIVEFYRE_COOKIE_NAME)) {
+        // Only if not already logged into Livefyre
+          // With valid user signature, returns LiveFyre cookie
+
+
+            $.ajax({
+                url: "server/ajax/token-endpoint.php",
+                data: {
+                UID: USER.UID,
+                UIDSignature: USER.UIDSignature,
+                signatureTimestamp: USER.signatureTimestamp
+                },
+                type: "POST",
+                dataType: "json",
+                cache: false
+            }).done(function (response) {
+                //     return error("Livefyre token request failed");
+                $.cookie(LIVEFYRE_COOKIE_NAME, response.token);
+
+                authLivefyre();
+
+                if (promise) {
+                    promise.success();
+                }
+
+            });
+
+
+        } else {
+          // Already logged in
             authLivefyre();
 
-            if(promise) {
-              promise.success();
+            if (promise) {
+                promise.success();
             }
-          });
         }
-      });
-    } else {
-      // Already logged in
-      authLivefyre();
-      if(promise) {
-        promise.success();
-      }
     }
-  }
 
-  var logoutLivefyre = function() {
-    if($.cookie(LIVEFYRE_COOKIE_NAME)) { // Only if currently logged into Livefyre
+
+
+
+
+  var logoutLivefyre = function (auth) {
+    if($.cookie(LIVEFYRE_COOKIE_NAME)) {
+      // Only if currently logged into Livefyre
       $.removeCookie(LIVEFYRE_COOKIE_NAME);
     }
   }
 
-  var authLivefyre = function() {
+  var authLivefyre = function (auth) {
     if($.cookie(LIVEFYRE_COOKIE_NAME)) {
       try {
+        // NEW STUB
+        // auth.login();
+
         fyre.conv.login($.cookie(LIVEFYRE_COOKIE_NAME));
+
+
       } catch(e) {
         error(e);
       }
     }
   }
 
+
+
+
   var authDelegateLivefyre = new fyre.conv.RemoteAuthDelegate();
+
+
   authDelegateLivefyre.login = function(delegate) {
     if(USER) {
       // Already logged in -- generate Livefyre token to sync login state
@@ -143,6 +189,8 @@
       triggerLogin(delegate);
     }
   }
+
+
   authDelegateLivefyre.logout = function(delegate) {
     triggerLogout(delegate);
   }
@@ -159,36 +207,79 @@
     delegate.success();
   }
 
+
+
+
   // Bind to Gigya login/logout global events
   gigya.accounts.addEventHandlers({
     onLogin: onLogin,
     onLogout: onLogout
   });
 
+
   // Query user state and render initial UI
   gigya.accounts.getAccountInfo({
     callback: function(response) {
       USER = response.errorCode === 0 ? response : undefined;
+      // UUUUUGGGGGHHHHHH!
       $(document).ready(onUserStateChange);
     }
   });
 
+
+
+
+
+  function loadLivefyreSDK (LF, settings) {
+
+    Livefyre.require(['fyre.conv#3', 'auth'],
+      function(Conv, auth) {
+
+        // new Conv(networkConfig, [convConfig],
+        //   function(commentsWidget) {}());
+
+        root.LF_APPS.Conv = Conv;
+        root.LF_APPS.auth = auth;
+
+
+      });
+  }
+
+
+
+
+
   $(document).ready(function() {
     // Bind to login/logout links
-    $(".user-functions .login").on("click", function() {
+
+    loginBTN$.on("click", function() {
       triggerLogin();
       return false;
     });
-    $(".user-functions .logout").on("click", function() {
+
+
+
+    logoutBTN$.on("click", function() {
       //triggerLogout();
-      gigya.accounts.logout({callback: function(){
+
+      gigya.accounts.logout({
+        callback: function(){
         fyre.conv.logout();
       }});
+
+
       return false;
     });
 
     // Render Livefyre comments
     var articleId = fyre.conv.load.makeArticleId(null);
+
+    // loadLivefyreSDK(root.Livefyre, SETTINGS).then(
+    //   function(){},
+    //   function(){}
+    // );
+
+
     fyre.conv.load(
       // Global config:
       {
@@ -214,5 +305,7 @@
       // onLoad
       authLivefyre
     );
+
+
   });
-}(jQuery));
+}(this, jQuery));
