@@ -15,6 +15,16 @@
 
     // CONFIGURE GIGYA
 
+    var GIGYA_SETTINGS = {
+        screens: {
+            loginScreen: 'Login-web',
+            profileScreen: 'Profile-web',
+        }
+    }
+
+    // SCREEN SETS:
+    // http://developers.gigya.com/010_Developer_Guide/10_UM360/040_Raas/020_Screen-Sets
+
 
     gigya.accounts.addEventHandlers({
         onLogin: function() {
@@ -67,33 +77,8 @@
     var triggerLogin = function (promise) {
 
         gigya.accounts.showScreenSet({
-            screenSet: "Login-web"
+            screenSet: GIGYA_SETTINGS.screens.loginScreen
         });
-
-
-
-
-    // HACKADELIC - REWORK THIS!
-        // Detect if screen was closed
-        // In the future, Gigya will have "onHide"
-        // var isScreenClosed = function () {
-        //     // Logged in!
-        //     if (USER || !waitingForLogin) {
-        //         return;
-        //     }
-
-        //     // Screen closed
-        //     if (!$(".gigya-screen-dialog:visible").length) {
-        //         // WHYYYYYYYY!?
-        //         return promise.failure();
-        //     }
-
-        //     setTimeout(isScreenClosed, 500);
-
-        // }
-
-
-        // setTimeout(isScreenClosed, 1000);
 
     };
 
@@ -152,13 +137,14 @@
             $.ajax({
                 url: "server/ajax/token-endpoint.php",
                 data: {
-                UID: USER.UID,
-                UIDSignature: USER.UIDSignature,
-                signatureTimestamp: USER.signatureTimestamp
+                    UID: USER.UID,
+                    UIDSignature: USER.UIDSignature,
+                    signatureTimestamp: USER.signatureTimestamp
                 },
                 type: "POST",
                 dataType: "json",
                 cache: false
+
             }).done(function (response) {
                 //     return error("Livefyre token request failed");
                 $.cookie(LIVEFYRE_COOKIE_NAME, response.token);
@@ -211,6 +197,8 @@
 
 
 
+
+
   var authDelegateLivefyre = new fyre.conv.RemoteAuthDelegate();
 
 
@@ -225,19 +213,28 @@
   }
 
 
+
   authDelegateLivefyre.logout = function(delegate) {
     triggerLogout(delegate);
   }
+
+
+
   authDelegateLivefyre.viewProfile = function(delegate) {
     gigya.accounts.showScreenSet({
-      screenSet: "Profile-web"
+      screenSet: GIGYA_SETTINGS.screens.profileScreen
     });
     delegate.success();
   }
+
+
+
   authDelegateLivefyre.editProfile = function(delegate) {
     gigya.accounts.showScreenSet({
-      screenSet: "Profile-web"
+      screenSet: GIGYA_SETTINGS.screens.profileScreen
     });
+
+
     delegate.success();
   }
 
