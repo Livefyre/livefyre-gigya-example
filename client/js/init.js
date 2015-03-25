@@ -1,5 +1,36 @@
-(function(root, $) {
+(function(root, $, Livefyre, gigya) {
     "use strict";
+
+    if (!gigya) {
+        console.log("MISSING GIGYA - SHUTTING DOWN");
+        return;
+    }
+
+
+    if (!Livefyre) {
+        console.log("MISSING GIGYA - SHUTTING DOWN");
+        return;
+    }
+
+
+    // CONFIGURE GIGYA
+
+
+    gigya.accounts.addEventHandlers({
+        onLogin: function() {
+
+            // if (waitingForLogin) {
+            //     waitingForLogin = false;
+            //     // WHYYYYYY
+            //     if (promise) {
+            //         promise.success();
+            //     }
+            // }
+        }
+    });
+
+
+
 
     var USER;
 
@@ -8,6 +39,8 @@
 
 
     var LF_READY = false;
+
+    var LF_READY = new $.Deferred();
     // Livefyre.required Apps
     root.LF_APPS = {};
 
@@ -24,7 +57,6 @@
 
 
 
-
     var error = function(message) {
         if(console && console.log) {
             console.log(message);
@@ -32,81 +64,83 @@
     }
 
 
-    var triggerLogin = function(promise) {
+    var triggerLogin = function (promise) {
+
         gigya.accounts.showScreenSet({
-        screenSet: "Login-web"
-    });
+            screenSet: "Login-web"
+        });
 
 
-  var waitingForLogin = true;
 
-    // Detect if user logged in
-  gigya.accounts.addEventHandlers({
-    onLogin: function() {
 
-        if (waitingForLogin) {
-          waitingForLogin = false;
+    // HACKADELIC - REWORK THIS!
+        // Detect if screen was closed
+        // In the future, Gigya will have "onHide"
+        // var isScreenClosed = function () {
+        //     // Logged in!
+        //     if (USER || !waitingForLogin) {
+        //         return;
+        //     }
 
-        if (promise) {
-          promise.success();
+        //     // Screen closed
+        //     if (!$(".gigya-screen-dialog:visible").length) {
+        //         // WHYYYYYYYY!?
+        //         return promise.failure();
+        //     }
+
+        //     setTimeout(isScreenClosed, 500);
+
+        // }
+
+
+        // setTimeout(isScreenClosed, 1000);
+
+    };
+
+
+
+
+
+
+    var triggerLogout = function (promise) {
+        gigya.accounts.logout({
+            callback: promise.success
+        });
+    }
+
+
+
+    // User state event handlers
+    var onLogin = function (user) {
+        USER = user;
+        onUserStateChange();
+    }
+
+
+
+    var onLogout = function() {
+        USER = undefined;
+        onUserStateChange();
+    }
+
+
+
+    var onUserStateChange = function() {
+        if (USER) {
+          // Logged in
+          loginLivefyre();
+
+          loginBTN$.hide();
+          logoutBTN$.show();
+
+        } else {
+          // Logged out
+          logoutLivefyre();
+
+          loginBTN$.show();
+          logoutBTN$.hide();
         }
-      }
     }
-  });
-
-    // Detect if screen was closed
-    // In the future, Gigya will have "onHide"
-    var isScreenClosed = function() {
-      // Logged in!
-      if(USER || !waitingForLogin) {
-        return;
-      }
-
-      // Screen closed
-      if(!$(".gigya-screen-dialog:visible").length) {
-        return promise.failure();
-      }
-
-      setTimeout(isScreenClosed, 500);
-    }
-    setTimeout(isScreenClosed, 1000);
-  }
-
-  var triggerLogout = function(promise) {
-    gigya.accounts.logout({
-      callback: promise.success
-    });
-  }
-
-  // User state event handlers
-  var onLogin = function(user) {
-    USER = user;
-    onUserStateChange();
-  }
-
-  var onLogout = function() {
-    USER = undefined;
-    onUserStateChange();
-  }
-
-
-
-  var onUserStateChange = function() {
-    if(USER) {
-      // Logged in
-      loginLivefyre();
-
-      loginBTN$.hide();
-      logoutBTN$.show();
-
-    } else {
-      // Logged out
-      logoutLivefyre();
-
-      loginBTN$.show();
-      logoutBTN$.hide();
-    }
-  }
 
 
 
@@ -114,7 +148,6 @@
         if(!$.cookie(LIVEFYRE_COOKIE_NAME)) {
         // Only if not already logged into Livefyre
           // With valid user signature, returns LiveFyre cookie
-
 
             $.ajax({
                 url: "server/ajax/token-endpoint.php",
@@ -186,6 +219,7 @@
       // Already logged in -- generate Livefyre token to sync login state
       loginLivefyre(delegate);
     } else {
+        console.log("what's this delegate", delegate);
       triggerLogin(delegate);
     }
   }
@@ -258,18 +292,22 @@
     });
 
 
-
     logoutBTN$.on("click", function() {
-      //triggerLogout();
+        // WHYYYYYYYY?
+        //triggerLogout();
 
-      gigya.accounts.logout({
-        callback: function(){
-        fyre.conv.logout();
-      }});
+        gigya.accounts.logout({
+            callback: function () {
+                console.log("gigglez logout", arguments);
 
+                fyre.conv.logout();
+            }
+        });
 
-      return false;
+        return false;
     });
+
+
 
     // Render Livefyre comments
     var articleId = fyre.conv.load.makeArticleId(null);
@@ -308,4 +346,4 @@
 
 
   });
-}(this, jQuery));
+}(this, jQuery, Livefyre, gigya));
