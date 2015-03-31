@@ -4,7 +4,7 @@ require_once 'config/config.php';
 ?><!DOCTYPE html>
 <html>
   <head>
-    <title>Gigya Integration</title>
+    <title>Gigya + Livefyre Integration</title>
     <style>
       .clear {
         padding: 2em 0;
@@ -59,7 +59,6 @@ require_once 'config/config.php';
     </script>
     <script src="//cdn.livefyre.com/Livefyre.js"></script>
 
-    <script src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js" type="text/javascript"></script>
     <script src="client/js/init.js" type="text/javascript"></script>
   </body>
 </html>
