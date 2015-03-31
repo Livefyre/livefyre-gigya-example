@@ -5,7 +5,7 @@ This sample application shows how to integrate Livefyre with Gigya's APIs to log
 
 ##INSTALL ME##
 
-git clone git@github.com
+`git clone https://github.com/Livefyre/livefyre-gigya-example.git`
 
 
 ##PREP ME##
