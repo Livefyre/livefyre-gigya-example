@@ -58,8 +58,14 @@
         }
     }
 
+    /**
+     * This is the Gigya User object
+     */
     var USER;
 
+    /**
+     * These would be your site's login/logout buttons
+     */
     var loginBTN$ = $(".login");
     var logoutBTN$ = $(".logout");
 
