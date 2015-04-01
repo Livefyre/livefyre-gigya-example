@@ -5,12 +5,12 @@
    * Let's be explicit and make sure these requirements are satisfied.
    */
   if (!gigya) {
-    console.log("MISSING GIGYA - SHUTTING DOWN");
+    console.log("MISSING GIGYA - Please ensure that Gigya is properly set up.");
     return;
   }
 
   if (!Livefyre) {
-    console.log("MISSING LIVEFYRE - SHUTTING DOWN");
+    console.log("MISSING LIVEFYRE - Please ensure that Livefyre is properly set up");
     return;
   }
 
@@ -170,6 +170,7 @@
               screenSet: GIGYA_SETTINGS.screens.loginScreen
             });
           }
+          errback(null);
         },
 
         logout: function(errback) {
@@ -181,18 +182,16 @@
           errback(null);
         },
 
-        viewProfile: function(delegate) {
+        viewProfile: function(user) {
           gigya.accounts.showScreenSet({
             screenSet: GIGYA_SETTINGS.screens.profileScreen
           });
-          delegate.success();
         },
 
-        editProfile: function(delegate) {
+        editProfile: function(user) {
           gigya.accounts.showScreenSet({
             screenSet: GIGYA_SETTINGS.screens.profileScreen
           });
-          delegate.success();
         }
     };
 
