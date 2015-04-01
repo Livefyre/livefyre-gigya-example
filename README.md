@@ -3,6 +3,15 @@
 This sample application shows how to integrate Livefyre with Gigya's APIs to log a user in. PHP has been used as the example language
 but the solution is language-agnostic.
 
+##SALIENT POINTS##
+While this example code is for demonstration purposes and will require modification for your installation, there are a number 
+of best practices suggestions incorporated into the code. 
+
+1. Abstraction of configurations in `config/config.php`
+1. Delegation of all login/logout methods to Livefyre. To avoid repeating code, it's best to control all login/logout
+methods in one defined place, whether that's your site's overall login or Livefyre. In this example, Livefyre handles the functionality.
+1. Use of the new `Livefyre.require` pattern instead of `fyre.conv`
+
 
 ##INSTALL ME##
 
@@ -47,14 +56,3 @@ jQuery
 jQuery Cookie
 
 (while these pieces aren't specifically required for the integration, they've been included to make life a little easier)
-
-
-
-##SALIENT POINTS##
-While this example code is for demonstration purposes and will require modification for your installation, there are a number 
-of best practices suggestions incorporated into the code. 
-
-1. Abstraction of configurations in `config/config.php`
-1. Delegation of all login/logout methods to Livefyre. To avoid repeating code, it's best to control all login/logout
-methods in one defined place, whether that's your site's overall login or Livefyre. In this example, Livefyre handles the functionality.
-1. Use of the new `Livefyre.require` pattern instead of `fyre.conv`
