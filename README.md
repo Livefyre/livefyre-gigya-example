@@ -44,15 +44,20 @@ There isn't really anything to do here, but take note perhaps, unless your PHP v
 SERVER:
 
 PHP 						>= 	5.4
+
 PHP_JSON					>=	5.2
+
 Gigya SDK					=	2.15.2
+
 Livefyre-php-utilities		=	2.0.2
+
 Requests					=	1.6
 
 
 CLIENT:
 
 jQuery
+
 jQuery Cookie
 
 (while these pieces aren't specifically required for the integration, they've been included to make life a little easier)
