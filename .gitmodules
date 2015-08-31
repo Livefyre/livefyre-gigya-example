@@ -1,3 +1,6 @@
 [submodule "server/lib/livefyre-php-utils"]
 	path = server/lib/livefyre-php-utils
 	url = https://github.com/Livefyre/livefyre-php-utils
+[submodule "server/lib/php-jwt"]
+	path = server/lib/php-jwt
+	url = https://github.com/firebase/php-jwt.git

@@ -3,9 +3,11 @@
 // SET ALL AGAINST DOC ROOT
 require_once '../../config/config.php';
 require_once '../lib/gigya/GSSDK.php';
+require_once '../lib/php-jwt/src/JWT.php';
 require_once '../lib/livefyre-php-utils/src/Livefyre.php';
 
 use Livefyre\Core\Network as Network;
+use \Firebase\JWT\JWT as JWT;
 
 // WE CALL THIS ENDPOINT TO GENERATE THE LIVEFYRE TOKEN
 // NOTE:
