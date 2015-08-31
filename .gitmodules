@@ -1,0 +1,3 @@
+[submodule "server/lib/livefyre-php-utils"]
+	path = server/lib/livefyre-php-utils
+	url = https://github.com/Livefyre/livefyre-php-utils
